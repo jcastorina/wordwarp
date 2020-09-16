@@ -177,7 +177,7 @@ io.on('connection', (socket)=>{
           
         return entry.save((err,result)=>{
           if(err){ return console.error(err) }
-  
+       
           io.sockets.emit('voteUpdate',{
             id: vote.id,
             _sub: submission

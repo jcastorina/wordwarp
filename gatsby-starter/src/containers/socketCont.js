@@ -52,25 +52,19 @@ class SocketContainer extends Container {
         })
         
         this.socket.on('voteUpdate',(message)=>{
-
-            console.log(message, "message input")
-
+  
             const _message = this.state.messages.find(m=>m.id === message.id)
-
             const _submission = _message.submissions.find(s=>s.id === message._sub.id)
-            
-            console.log(_submission,"submission")
+
+            _submission.votedBy = message._sub.votedBy
 
             if(_submission.votedBy.includes(this.state.user)){
               _submission.votedByMe = true
+            } else {
+              _submission.votedByMe = false
             }
 
-            console.log(this.state.messages,"messages state")
-
             this.setState({ ...this.state })
-        
-
-
         })
     }
 
@@ -87,8 +81,6 @@ class SocketContainer extends Container {
     }
   
     vote = ( message_id, sub ) => {
-        console.log(sub, "sub")
-
 
       if(sub.submittedBy !== this.state.user){
         
