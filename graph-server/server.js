@@ -125,14 +125,17 @@ io.on('connection', (socket)=>{
 
     const user = socket.handshake.query.user
 
-    console.log('\n-----------------\n\n   ',socket.id,' connected *\n');
+    console.log('\n-----------------\n\n   ',user,' connected with ID ',socket.id,'*\n');
 
     Entry.find((err,entries)=>{
       if(err){ return console.error(err) }
       entries?entries.forEach(entry=>{
-        entry.submissions.forEach(s=>s.votedByMe=true)
+        entry.submissions.forEach(s=>{
+          s.votedBy.some(e=>{
+            e===user?s.votedByMe=true:null
+          })
+        })
       }):null
-      //console.log(entries[1].submissions[0], "res")
     
       socket.emit('init', entries)
     })

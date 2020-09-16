@@ -19,5 +19,3 @@ const Entry = new Schema({
   
 module.exports = mongoose.model('Entry', Entry);
 module.exports = mongoose.model('Submission', Submission);
-
-// { name: "Thomas Jefferson", totalVotes: 4, _id: uuid(), submissions: [], submittedBy: "lutes" },

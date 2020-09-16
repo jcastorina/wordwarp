@@ -5,7 +5,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { css } from "@emotion/core"
 import { rhythm } from "../utils/typography"
 
-
 const hotpink = css({
     color: 'hotpink'
   })
@@ -34,39 +33,31 @@ const entryStyles = css({
     'margin': `${rhythm(0.5)}`,
     'cursor': 'pointer',
     'backgroundColor': '#fff'
-  })
+})
 
-  const headerStyles = css({
+const headerStyles = css({
     'padding': `${rhythm(1)}`,
     'paddingBottom': `${rhythm(1.5)}`,
     'margin': `${rhythm(0.5)}`,
     'backgroundColor': '#fff',
     'fontSize': '32px',
     'fontWeight': 'bold'
-  })
-
-let user = "Brian"
+})
 
 export default function ModalDisplay({ props, isReady, setIsReady, mutate, vote }){
 
-
     let nameCharCount = nameObj(props.name)
-    
     let textInput = useRef(null);
 
     return (
-
-        <MuiThemeProvider theme={barTheme}>
-            
+        <MuiThemeProvider theme={barTheme}>   
             <div css={headerStyles}>{props.name}</div>
  
-            <TextField
-            
+            <TextField     
                 label={isReady?"Press Enter to Submit!":"Enter Submission"}
                 color={!isReady?"secondary":"primary"}
                 inputRef={textInput}
-                onChange={(e)=>{
-                    
+                onChange={(e)=>{            
                     setIsReady(charCompare(nameCharCount,e.target.value)) 
                 }}
                 
@@ -78,9 +69,7 @@ export default function ModalDisplay({ props, isReady, setIsReady, mutate, vote 
                                 id: props.id,
                                 content: e.target.value
                             })
-
                             textInput.current.value = ""
-
                             setIsReady(false)
                         }
                     }
@@ -89,39 +78,28 @@ export default function ModalDisplay({ props, isReady, setIsReady, mutate, vote 
 
             {props.submissions.length>0?
                 props.submissions.map(submission=>{
-
-                    return (
-            
+                    return (    
                         <div 
-                        
                             key={submission.id}
                             role="none"
                             onClick={()=>{
-            
                                 vote(props.id,submission)
                             }}
                             css={entryStyles}
                         >
                             <div style={{float: "left"}}>
-
                                 {submission.submissionName}
-
                             </div>
-
-                            <div style={{float: "right"}}>
-                            
+                            <div style={{float: "right"}}>              
                                 {submission.votedBy.length}
                                 <span className="material-icons" style={{color: "red"}}>{submission.votedByMe?"favorite":"favorite_border"}</span>
                             </div>
-                        </div>
-                
+                        </div>     
                     )
                 })
             : 
                 null
-            }
-     
+            }  
         </MuiThemeProvider>
-
     )
 }
