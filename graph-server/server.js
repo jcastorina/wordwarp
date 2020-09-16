@@ -123,14 +123,18 @@ const io = socket(server)
 
 io.on('connection', (socket)=>{
 
-    let user = socket.handshake.query.user
+    const user = socket.handshake.query.user
 
     console.log('\n-----------------\n\n   ',socket.id,' connected *\n');
 
-    Entry.find((err,res)=>{
+    Entry.find((err,entries)=>{
       if(err){ return console.error(err) }
-      
-      socket.emit('init', res)
+      entries?entries.forEach(entry=>{
+        entry.submissions.forEach(s=>s.votedByMe=true)
+      }):null
+      //console.log(entries[1].submissions[0], "res")
+    
+      socket.emit('init', entries)
     })
 
     socket.on('mutate',(mutation)=>{

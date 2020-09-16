@@ -5,7 +5,8 @@ const Submission = new Schema({
     submissionName: String,
     id: Number,
     submittedBy: String,
-    votedBy: [ String ]
+    votedBy: [ String ],
+    votedByMe: Boolean
 })
 
 const Entry = new Schema({

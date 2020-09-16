@@ -58,9 +58,8 @@ class SocketContainer extends Container {
 
             _submission.votedBy = message._sub.votedBy
 
-            if(_submission.votedBy.includes(this.state.user)){
-              _submission.votedByMe = true
-            } else {
+            _submission.votedByMe = true
+            if(!_submission.votedBy.includes(this.state.user)){
               _submission.votedByMe = false
             }
 
