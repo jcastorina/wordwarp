@@ -1,32 +1,15 @@
 import React, { useState, useEffect, useMemo } from "react"
-
 import ReactModal from "react-modal"
 import Layout from "./layout"
-
 import SocketContainer from "../containers/socketCont"
 import { Provider, Subscribe } from "unstated"
 import Name from "./name"
 import ModalDisplay from "./modalDisplay"
 import SubmitDisplay from "./submitDisplay"
-
-import "../styles/app.css"
-
-import Test from "../pages/test"
+import FadeIn from "./fadeIn"
 import Button from "../components/button"
 
 ReactModal.setAppElement('#___gatsby')
-
-
-
-const nameStyle = {
-  backgroundColor: 'hotpink',
-  padding: '2em',
-  width: '40em',
-  '&:hover': {
-    color: 'lightgreen',
-    cursor: 'pointer'
-  }
-}
 
 export default function Home(props) {
 
@@ -39,32 +22,22 @@ export default function Home(props) {
   const [isLoading,setIsLoading] = useState(true)
   const [user,setUser] = useState({})
 
- // const user = useMemo(()=>new SocketContainer(props.user.name))
-
   useEffect(()=>{
-
     let text = new SocketContainer(props.user.name)
-
     setUser(text)
-    
     setIsLoading(false)
   },[props.user.name])
-  
+  console.log('how many times are we freaking re-rendering home.js?')
   return (
 
     isLoading?<>LOADING...</>:
-    <Test>
-    
-      <Provider>
-       
+    <FadeIn>
+    <header css={headerStyle}>hi, {props.user.name}</header>
+      <Provider> 
         <Subscribe to={[user]}>
-
           {todo=>(
-            
             <Layout>
-              
               {modalProps.open?
-            
                 <ReactModal
                   isOpen={modalProps.open}
                   onRequestClose={()=>{
@@ -74,8 +47,7 @@ export default function Home(props) {
                         type: false
                       })
                       setIsReady(false)
-                  }}
-                >
+                  }}>
                   
                   <button 
                     className="close"       
@@ -91,19 +63,14 @@ export default function Home(props) {
                                   isReady = {isReady}
                                   setIsReady = {setIsReady}
                                   mutate = {todo.mutate}
-                                  vote = {todo.vote}
-                                  
-                            
-                    />
+                                  vote = {todo.vote}/>
                   :
                     <SubmitDisplay 
                         isReady = {isReady}
                         setIsReady = {setIsReady}
                         create = {todo.create}
                         modalProps = {modalProps}
-                        setModalProps = {setModalProps}
-                  
-                    />
+                        setModalProps = {setModalProps}/>
                   }
                 </ReactModal>
               :
@@ -125,17 +92,36 @@ export default function Home(props) {
                                 key={message.id} 
                                 props={message}          
                                 setModalProps={setModalProps}
-                                style={nameStyle}
-                              />
+                                style={nameStyle}/>
                     })
                   }
                 </>
               }
-
             </Layout>
           )}  
         </Subscribe>
     </Provider>
-    </Test>
+    </FadeIn>
   )
+}
+
+const headerStyle = {
+  backgroundColor: 'black',
+  color: 'turquoise',
+  height: '2em',
+  padding: '0em',
+  margin: '0em',
+  border: '0em',
+  width: '100%',
+  textAlign: 'center'
+}
+
+const nameStyle = {
+  backgroundColor: 'hotpink',
+  padding: '2em',
+  width: '40em',
+  '&:hover': {
+    color: 'lightgreen',
+    cursor: 'pointer'
+  }
 }
