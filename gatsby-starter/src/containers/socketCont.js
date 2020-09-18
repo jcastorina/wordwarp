@@ -92,6 +92,11 @@ class SocketContainer extends Container {
         console.log("can't vote on your own sub")
       }
     }
+
+    disconnect = () => {
+      this.socket.disconnect()
+      console.log("socket disconnected")
+    }
   }
   
   export default SocketContainer;

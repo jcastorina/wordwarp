@@ -6,6 +6,7 @@ const passport = require('passport'), LocalStrategy = require('passport-local').
 const bodyParser = require('body-parser');
 const MongoStore = require('connect-mongo')(session);
 const socket = require('socket.io')
+const auth = require('./middleware/authMiddleware');
 
 const uuid = require('uuid').v4;
 
@@ -58,8 +59,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const server = app.listen(4000);
-
-const auth = require('./middleware/authMiddleware');
+const io = socket(server)
 
 app.post('/register', auth.isNotAuth, (req, res, next) => {
 
@@ -76,55 +76,39 @@ app.post('/register', auth.isNotAuth, (req, res, next) => {
   })
 });
 
-app.delete('/logout', auth.isAuth, (req, res) =>{
- 
-  req.logOut()
-  res.send('logged out')
-})
-
-app.post('/submit', auth.isNotAuth, (req,res)=>{
-
-  passport.authenticate('local',(err,user,info)=>{
-    
-    if(err){ return res.send("error processing login")}
+app.post('/login', auth.isNotAuth, (req,res)=>{
+  passport.authenticate('local',(err,user)=>{   
+    if(err){ return res.sendStatus(400) }
     if(!user){ 
-    
-      if(info.message === "Missing credentials"){
-        return res.send("Username can't be blank")
-      }
-      if(info.message === "Incorrect password"){
-        return res.send("Password incorrect for: ")
-      }
-      if(info.message === "Incorrect username"){
-   
-        return res.send("no username")
-      }
-      return res.send("Error processing login")
+      return res.sendStatus(401)
     }
-
     req.logIn(user,()=>{
       res.cookie("test","icles")
-      return res.send("logged in")
+      return res.sendStatus(200)
     })
-    
   })(req,res)
 })
 
 app.get('/auth', (req,res)=>{
   let isAuthenticated = req.isAuthenticated()
-  
-    res.json({
-      "status": isAuthenticated,
-      "user": isAuthenticated ? req.user.username : null
-    })
+  if(isAuthenticated){
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(401)
+  }
 })
 
-const io = socket(server)
+app.delete('/logout', auth.isAuth, (req, res) =>{
+
+  req.logOut()
+  res.send('logged out')
+})
 
 io.on('connection', (socket)=>{
 
     const user = socket.handshake.query.user
 
+    //socket.disconnect()
     console.log('\n-----------------\n\n   ',user,' connected with ID ',socket.id,'*\n');
 
     Entry.find((err,entries)=>{
@@ -209,6 +193,10 @@ io.on('connection', (socket)=>{
     
         io.sockets.emit('add', entryObj )
       }) 
+    })
+
+    socket.on('disconnect',()=>{
+      console.log(user+" disconnected (coward)")
     })
 })
 

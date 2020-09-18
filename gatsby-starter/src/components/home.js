@@ -1,24 +1,20 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 import ReactModal from "react-modal"
 import Layout from "./layout"
 import SocketContainer from "../containers/socketCont"
 import { Provider, Subscribe } from "unstated"
-import Name from "./name"
 import ModalDisplay from "./modalDisplay"
 import SubmitDisplay from "./submitDisplay"
-import FadeIn from "./fadeIn"
 import Button from "../components/button"
+import Header from "./Header"
+import NameWrapper from "./NameWrapper"
 
 ReactModal.setAppElement('#___gatsby')
 
-export default function Home(props) {
-
-  const [modalProps,setModalProps] = useState({
-    type: false,
-    open: false
-  })
+export default function Home({ props }) {
+//  console.log(props,"home props") 
+  const [modalProps,setModalProps] = useState({type: false,open: false})
   const [isReady,setIsReady] = useState(false)
-
   const [isLoading,setIsLoading] = useState(true)
   const [user,setUser] = useState({})
 
@@ -27,15 +23,17 @@ export default function Home(props) {
     setUser(text)
     setIsLoading(false)
   },[props.user.name])
-  console.log('how many times are we freaking re-rendering home.js?')
+
   return (
 
     isLoading?<>LOADING...</>:
-    <FadeIn>
-    <header css={headerStyle}>hi, {props.user.name}</header>
+    <>
+      
       <Provider> 
         <Subscribe to={[user]}>
           {todo=>(
+            <>
+            <Header {...props} socketLogout={todo.disconnect}></Header>
             <Layout>
               {modalProps.open?
                 <ReactModal
@@ -75,53 +73,21 @@ export default function Home(props) {
                 </ReactModal>
               :
                 <>
-                  <Button 
-                    onClick={(e)=>{
-
+                  <Button onClick={(e)=>{
                       setModalProps({
                         ...modalProps,
                         type: true,
                         open: true
-                      })
-                      
-                    }}
-                  >Create One</Button>
-
-                  {todo.state.messages.map(message=>{
-                      return  <Name 
-                                key={message.id} 
-                                props={message}          
-                                setModalProps={setModalProps}
-                                style={nameStyle}/>
-                    })
-                  }
+                      })}}>Create One</Button>
+                  <NameWrapper {...props} messages={todo.state.messages} modalCtrl={setModalProps} />
+                
                 </>
               }
             </Layout>
+            </>
           )}  
         </Subscribe>
     </Provider>
-    </FadeIn>
+    </>
   )
-}
-
-const headerStyle = {
-  backgroundColor: 'black',
-  color: 'turquoise',
-  height: '2em',
-  padding: '0em',
-  margin: '0em',
-  border: '0em',
-  width: '100%',
-  textAlign: 'center'
-}
-
-const nameStyle = {
-  backgroundColor: 'hotpink',
-  padding: '2em',
-  width: '40em',
-  '&:hover': {
-    color: 'lightgreen',
-    cursor: 'pointer'
-  }
 }

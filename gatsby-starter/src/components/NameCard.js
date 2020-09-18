@@ -1,13 +1,13 @@
 import React from "react"
 
-export default function name({ props, setModalProps, style }){
+export default function name({ props, modalCtrl }){
     
     return (
         <div
             role="none"
-            css={style}
+            css={nameStyle}
             onClick={()=>{
-                setModalProps({
+                modalCtrl({
                     open: true,
                     type: false,
                     name: props.entryName, 
@@ -15,7 +15,16 @@ export default function name({ props, setModalProps, style }){
                     id: props.id,
                     submissions: props.submissions
                 })
-            }}
-        >{props.entryName}</div>
+            }}>{props.entryName}</div>
     )
+}
+
+const nameStyle = {
+    backgroundColor: 'white',
+    padding: '2em',
+    width: '40em',
+    '&:hover': {
+      color: 'hotpink',
+      cursor: 'pointer'
+    }
 }

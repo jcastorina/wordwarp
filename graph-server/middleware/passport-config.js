@@ -11,11 +11,11 @@ passport.use(new LocalStrategy(
       if (err) { return done(err); }
       if (!user) {
         console.log('no user (in passport-config.js)')
-        return done(null, false, { message: 'Incorrect username' }, 400);
+        return done(null, null);
       }
       if (!user.validatePassword(password)) {
         console.log('bad pass (in passport-config.js)')
-        return done(null, false, { message: 'Incorrect password' }, 400);
+        return done(null, null);
       }
       console.log('validated (in passport-config.js)')
       return done(null, user);
