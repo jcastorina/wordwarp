@@ -1,7 +1,7 @@
 import React from "react"
 
 export default function name({ props, modalCtrl }){
-    
+ 
     return (
         <div
             role="none"

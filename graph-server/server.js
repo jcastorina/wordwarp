@@ -83,6 +83,7 @@ app.post('/login', auth.isNotAuth, (req,res)=>{
       return res.sendStatus(401)
     }
     req.logIn(user,()=>{
+     
       res.cookie("test","icles")
       return res.sendStatus(200)
     })
@@ -92,7 +93,8 @@ app.post('/login', auth.isNotAuth, (req,res)=>{
 app.get('/auth', (req,res)=>{
   let isAuthenticated = req.isAuthenticated()
   if(isAuthenticated){
-    res.sendStatus(200)
+    console.log(req.user.username)
+    res.send(req.user.username)
   } else {
     res.sendStatus(401)
   }

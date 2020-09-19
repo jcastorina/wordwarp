@@ -1,13 +1,30 @@
-import { createContext, useState } from "react"
+import React, { createContext, useState, useEffect, useMemo } from "react"
+import { auth } from "../api/user"
+import { createSocket } from "../api/"
 
-const UserContext = createContext()
+export const UserContext = createContext(null)
 
-function UserProvider () {
+export default function UserProvider ({ children }) {
 
-    const [ user, setUser ] = useState()
-    
+    const [ user, setUser ] = useState('')
+    const [ isLoggedIn, setLoggedIn ] = useState(Boolean(user))
+
+    const socket = useMemo(()=>{
+        if(!user){ return null }
+        return createSocket({query: { user } })
+    },[user])
+
+    useEffect(()=>{
+        auth()
+        .then((data)=>{
+
+            setUser(data.data)
+            setLoggedIn(true)
+        })
+        .catch(e=>setLoggedIn(false))
+    },[isLoggedIn])
 
     return (
-        <UserContext.Provider value={}></UserContext.Provider>
+        <UserContext.Provider value={{socket,user,setUser,isLoggedIn}}>{children}</UserContext.Provider>
     )
 }

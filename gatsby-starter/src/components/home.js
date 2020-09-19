@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import ReactModal from "react-modal"
 import Layout from "./layout"
 import SocketContainer from "../containers/socketCont"
@@ -8,32 +8,40 @@ import SubmitDisplay from "./submitDisplay"
 import Button from "../components/button"
 import Header from "./Header"
 import NameWrapper from "./NameWrapper"
+import { UserContext } from "../contexts/user"
 
 ReactModal.setAppElement('#___gatsby')
 
-export default function Home({ props }) {
-//  console.log(props,"home props") 
+export default function Home() {
+  
+  const userContext = useContext(UserContext)
+  
+  console.log(userContext,"home")
+  
   const [modalProps,setModalProps] = useState({type: false,open: false})
   const [isReady,setIsReady] = useState(false)
   const [isLoading,setIsLoading] = useState(true)
-  const [user,setUser] = useState({})
+  const [container,setContainer] = useState({})
+
 
   useEffect(()=>{
-    let text = new SocketContainer(props.user.name)
-    setUser(text)
+    const text = new SocketContainer(userContext.user)
+    
+    setContainer(text)
+    console.log(text, "text")
     setIsLoading(false)
-  },[props.user.name])
+    
+  },[userContext.user])
 
   return (
 
     isLoading?<>LOADING...</>:
-    <>
-      
+  
       <Provider> 
-        <Subscribe to={[user]}>
+        <Subscribe to={[container]}>
           {todo=>(
             <>
-            <Header {...props} socketLogout={todo.disconnect}></Header>
+            <Header user={userContext.user} setUser={userContext.setUser} socketLogout={todo.disconnect}></Header>
             <Layout>
               {modalProps.open?
                 <ReactModal
@@ -79,7 +87,7 @@ export default function Home({ props }) {
                         type: true,
                         open: true
                       })}}>Create One</Button>
-                  <NameWrapper {...props} messages={todo.state.messages} modalCtrl={setModalProps} />
+                  <NameWrapper messages={todo.state.messages} modalCtrl={setModalProps} />
                 
                 </>
               }
@@ -88,6 +96,6 @@ export default function Home({ props }) {
           )}  
         </Subscribe>
     </Provider>
-    </>
+
   )
 }

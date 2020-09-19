@@ -1,44 +1,18 @@
-import React, { useState, useEffect } from "react"
-import { register, auth } from "../api/user"
+import React from "react"
 import "../styles/app.css"
-import Home from '../components/home'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import FadeIn from '../components/fadeIn'
-import Login from "../components/Login"
+import UserProvider from "../contexts/user"
+import Root from "../containers/root"
 
-
-export default function Root () {
-
-    const [ user, setUser ] = useState({})
-    const isLoggedIn = Boolean(user)
-
-    const userObject = {
-        user: user,
-        setUser: setUser,
-    }
-
-    return (
-        <MuiThemeProvider theme={siteTheme}>
-            <FadeIn>         
-                {isLoggedIn?                           
-                    <Home props={userObject}/>           
-                :
-                    <Login onSuccess={({username})=>{
-                        setUser({ name: username })        
-                    }}/>
-                }
-            </FadeIn>
-        </MuiThemeProvider>
-    )
-}
-
-function handleRegister (o,setRegToggle, setLoggedIn) {
-    register(o)
-    .then(() =>{
+export default function App () {
     
-        setLoggedIn(true)
-    })
-    .catch(()=>{console.error("failed")})
+    return (    
+        <MuiThemeProvider theme={siteTheme}>
+            <UserProvider>
+                <Root/>
+            </UserProvider>
+        </MuiThemeProvider>       
+    )
 }
 
 const siteTheme = createMuiTheme({

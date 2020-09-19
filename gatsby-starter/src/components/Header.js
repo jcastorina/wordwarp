@@ -3,11 +3,10 @@ import Button from "./button"
 import { logout } from "../api/user"
 
 export default function Header ( props ) {
-    console.log(props,"header")
-   
+
     return ( 
      
-    <header css={headerStyle}>{props.user?headline.loggedIn+props.user.name:headline.notLoggedIn}<Button onClick={()=>{handleLogout(props)}}>LOGOUT</Button></header>
+    <header css={headerStyle}>{props.user?headline.loggedIn+props.user:headline.notLoggedIn}<Button onClick={()=>{handleLogout(props)}}>LOGOUT</Button></header>
     
         )
 }

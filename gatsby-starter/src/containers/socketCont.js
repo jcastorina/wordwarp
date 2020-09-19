@@ -1,9 +1,7 @@
 import {Container} from 'unstated'
 import io from 'socket.io-client'
 
-
 class SocketContainer extends Container {
-
 
     constructor(props){   
         super(props)

@@ -1,22 +1,31 @@
 html {
-  background: linear-gradient(217deg, rgba(64,224,208,.8), rgba(64,224,208,0) 70.71%),
-  linear-gradient(127deg, rgba(255,105,180,.8), rgba(255,105,180,0) 70.71%),
-  linear-gradient(336deg, rgba(153,50,204,.8), rgba(153,50,204,0) 70.71%);
+  background: linear-gradient(
+      217deg,
+      rgba(64, 224, 208, 0.8),
+      rgba(64, 224, 208, 0) 70.71%
+    ),
+    linear-gradient(
+      127deg,
+      rgba(255, 105, 180, 0.8),
+      rgba(255, 105, 180, 0) 70.71%
+    ),
+    linear-gradient(
+      336deg,
+      rgba(153, 50, 204, 0.8),
+      rgba(153, 50, 204, 0) 70.71%
+    );
   height: 100%;
-  
 }
 
-
-
 @font-face {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-style: normal;
   font-weight: 400;
-  src: url(../../static/material_icons.woff2) format('woff2');
+  src: url(../../static/material_icons.woff2) format("woff2");
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -36,47 +45,50 @@ html {
   -moz-osx-font-smoothing: grayscale;
 
   /* Support for IE. */
-  font-feature-settings: 'liga';
+  font-feature-settings: "liga";
 }
 
-
 .close {
-    background-color: #DDDDDD;
-    border: none;
-    color: white;
-    padding: 12px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    display: inline-flex;
-    font-size: 12px;
-    margin: 2px 2px;
-    float: right;
-    border-radius: 50%;
+  background-color: #dddddd;
+  border: none;
+  color: white;
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  font-size: 12px;
+  margin: 2px 2px;
+  float: right;
+  border-radius: 50%;
+}
 
+.face:hover {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
   }
-  
-  .face:hover {
-    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
   }
-  
-  @keyframes shake {
-    10%, 90% {
-      transform: translate3d(-1px, 0, 0);
-    }
-    
-    20%, 80% {
-      transform: translate3d(2px, 0, 0);
-    }
-  
-    30%, 50%, 70% {
-      transform: translate3d(-4px, 0, 0);
-    }
-  
-    40%, 60% {
-      transform: translate3d(4px, 0, 0);
-    }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
   }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
